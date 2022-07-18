@@ -21,11 +21,12 @@ public class VerificationService {
     }
 
     public Participant verify(String verificationCode) throws InvalidVerificationCodeException {
-        Optional<Participant> participant = this.participantRepository.findByVerificationCode(verificationCode);
-        if(participant.isPresent()){
-            this.participantRepository.verifyParticipant(verificationCode);
-            return this.participantRepository.findByVerificationCode(verificationCode).orElse(null);
-        }else {
+//        Optional<Participant> participant = this.participantRepository.findByVerificationCode(verificationCode);
+   if(this.participantRepository.findByVerificationCode(verificationCode) != null){
+       this.participantRepository.verifyParticipant(true, verificationCode);
+       return this.participantRepository.findByVerificationCode(verificationCode);
+   }
+   else {
             throw new InvalidVerificationCodeException("VerificationCode does not exist");
         }
     }
