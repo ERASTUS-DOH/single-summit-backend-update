@@ -1,0 +1,23 @@
+spring:
+  mail:
+    host: mail.kiccghana.com
+    port: 26
+    username: singlessummit@kiccghana.com
+    password: SS2022.Champion
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  datasource:
+    url: jdbc:mysql://localhost/ssRegistration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password:
+  sql:
+    init:
+      platform: mysql
+  jpa:
+    hibernate:
+      ddl-auto: update
+  

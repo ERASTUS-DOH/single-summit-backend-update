@@ -1,0 +1,32 @@
+spring:
+  mail:
+    host: mail.kiccghana.com
+    port: 26
+    username: singlessummit@kiccghana.com
+    password: SS2022.Champion
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/ssRegistration?useSSL=false
+    username: root
+    password:
+  sql:
+    init:
+      platform: mysql
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+
+app:
+  configuration:
+    imageDirectory: /Users/erastus/DEV/Personal_Projects/SS_RegistrationApplication/images
+server:
+  port: 8089
