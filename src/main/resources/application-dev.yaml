@@ -1,5 +1,6 @@
 spring:
   mail:
+    default-encoding: UTF-8
     host: mail.kiccghana.com
     port: 26
     username: singlessummit@kiccghana.com
@@ -8,6 +9,9 @@ spring:
       mail:
         smtp:
           auth: true
+          connectiontimeout: 15000
+          timeout: 15000
+          debug: true
           starttls:
             enable: true
   datasource:
@@ -27,6 +31,12 @@ spring:
 
 app:
   configuration:
-    imageDirectory: /Users/erastus/DEV/Personal_Projects/SS_RegistrationApplication/images
+    sendGridApiKey: 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
+    accessKey: AKIA5BMUX5KS25P2HQ2Z
+    secret: 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
+
+
 server:
   port: 8089
+
+

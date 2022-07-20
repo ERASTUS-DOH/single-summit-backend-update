@@ -6,9 +6,7 @@ import com.InspiredLabs.SS_RegistrationApplication.repository.ParticipantReposit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VerificationService {
@@ -20,8 +18,8 @@ public class VerificationService {
         this.participantRepository = participantRepository;
     }
 
+
     public Participant verify(String verificationCode) throws InvalidVerificationCodeException {
-//        Optional<Participant> participant = this.participantRepository.findByVerificationCode(verificationCode);
    if(this.participantRepository.findByVerificationCode(verificationCode) != null){
        this.participantRepository.verifyParticipant(true, verificationCode);
        return this.participantRepository.findByVerificationCode(verificationCode);

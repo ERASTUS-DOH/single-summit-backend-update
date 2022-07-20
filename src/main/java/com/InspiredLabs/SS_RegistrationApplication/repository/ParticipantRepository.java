@@ -31,4 +31,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
    @Query(value="select  p from Participant p where p.gender = :gender")
     List<Participant> getParticipantByGender(@Param("gender") String gender);
+
+   @Query(value="select p from Participant p where p.email = :email")
+   Optional<Participant> getParticipantByEmail(@Param("email") String email);
 }

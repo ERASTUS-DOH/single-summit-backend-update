@@ -23,7 +23,7 @@ public class Participant {
     @Column(name = "last_name")
     public String lastName;
 
-    @Column(name="gender", nullable = false)
+    @Column(name = "gender", nullable = false)
     public String gender;
 
     @Column(name = "email", nullable = false)
@@ -38,17 +38,20 @@ public class Participant {
     @Column(name = "first_timer_status")
     public boolean firstTimerStatus;
 
-    @Column(name="publicity_avenue")
+    @Column(name = "publicity_avenue")
     public String publicityAvenue;
 
     @Column(name = "verification_status")
     public boolean verificationStatus;
 
-    public Participant(){
+    @Column(name = "qr_code", nullable = false)
+    public String image_name;
+
+    public Participant() {
 
     }
 
-    public Participant( String verificationCode, String firstName, String lastName, String gender, String email, String telephone, boolean memberShipStatus, boolean firstTimerStatus, String publicityAvenue, boolean verificationStatus) {
+    public Participant(String verificationCode, String firstName, String lastName, String gender, String email, String telephone, boolean memberShipStatus, boolean firstTimerStatus, String publicityAvenue, boolean verificationStatus, String image_name) {
         this.verificationCode = verificationCode;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -59,15 +62,11 @@ public class Participant {
         this.firstTimerStatus = firstTimerStatus;
         this.publicityAvenue = publicityAvenue;
         this.verificationStatus = verificationStatus;
+        this.image_name = image_name;
     }
-
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getVerificationCode() {
@@ -150,6 +149,14 @@ public class Participant {
         this.verificationStatus = verificationStatus;
     }
 
+    public String getImage_name() {
+        return image_name;
+    }
+
+    public void setImage_name(String image_name) {
+        this.image_name = image_name;
+    }
+
     @Override
     public String toString() {
         return "Participant{" +
@@ -164,6 +171,7 @@ public class Participant {
                 ", firstTimerStatus=" + firstTimerStatus +
                 ", publicityAvenue='" + publicityAvenue + '\'' +
                 ", verificationStatus=" + verificationStatus +
+                ", image_name='" + image_name + '\'' +
                 '}';
     }
 }
