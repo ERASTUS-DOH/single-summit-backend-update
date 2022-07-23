@@ -14,7 +14,7 @@ public class Participant {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    @Column(name = "verification_Code", nullable = false)
+    @Column(name = "verification_Code")
     public String verificationCode;
 
     @Column(name = "first_name", nullable = false)
@@ -44,7 +44,7 @@ public class Participant {
     @Column(name = "verification_status")
     public boolean verificationStatus;
 
-    @Column(name = "qr_code", nullable = false)
+    @Column(name = "qr_code")
     public String image_name;
 
     public Participant() {

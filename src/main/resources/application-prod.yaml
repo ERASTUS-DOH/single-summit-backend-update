@@ -11,13 +11,20 @@ spring:
           starttls:
             enable: true
   datasource:
-    url: jdbc:mysql://localhost/ssRegistration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password:
+    url: jdbc:mysql://single-summit-2022.c3kzguxabici.us-east-2.rds.amazonaws.com/single-summit-2022?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: kicc
+    password: NewEra_2022
   sql:
     init:
       platform: mysql
   jpa:
     hibernate:
       ddl-auto: update
-  
+
+app:
+  configuration:
+    accessKey: AKIA5BMUX5KS25P2HQ2Z
+    secret: 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
+
+server:
+  port: 5000

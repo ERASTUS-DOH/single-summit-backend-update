@@ -1,6 +1,7 @@
 package com.InspiredLabs.SS_RegistrationApplication.service;
 
 import com.InspiredLabs.SS_RegistrationApplication.dto.Participant;
+import com.InspiredLabs.SS_RegistrationApplication.dto.request.InHouseRegistrationDetails;
 import com.InspiredLabs.SS_RegistrationApplication.dto.request.RegistrationDetails;
 import com.InspiredLabs.SS_RegistrationApplication.exception.InvalidUserException;
 import com.InspiredLabs.SS_RegistrationApplication.repository.ParticipantRepository;
@@ -82,6 +83,28 @@ private static final Logger LOGGER = Logger.getLogger(RegistrationService.class.
         this.participantRepository.save(participant);
 
     }
+
+    public void inHouseRegistration(InHouseRegistrationDetails registrationDetails) throws InvalidUserException {
+        Participant participant = new Participant();
+        participant.setFirstName(registrationDetails.firstName);
+        participant.setLastName(registrationDetails.lastName);
+        participant.setEmail(registrationDetails.email);
+        participant.setTelephone(registrationDetails.telephone);
+        participant.setGender(registrationDetails.gender);
+        participant.setMemberShipStatus(registrationDetails.membershipStatus);
+        participant.setFirstTimerStatus(registrationDetails.firstTimerStatus);
+        participant.setPublicityAvenue(registrationDetails.publicityAvenue);
+        participant.setVerificationStatus(true);
+
+        Optional<Participant> optionalParticipant = this.participantRepository.getParticipantByEmail(participant.email);
+        if(optionalParticipant.isPresent()){
+            throw new InvalidUserException("User with email "+ participant.email + " already exist");
+        }
+
+        this.participantRepository.save(participant);
+    }
+
+
 
     public static Map<String,String> getImageAndVerificationCode(){
         String randomCode = Constant.uniqueCodeGenerator();

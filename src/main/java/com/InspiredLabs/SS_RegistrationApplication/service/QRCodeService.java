@@ -1,9 +1,7 @@
 package com.InspiredLabs.SS_RegistrationApplication.service;
 
 import com.InspiredLabs.SS_RegistrationApplication.service.qrcodeGenetator.QrCode;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -11,12 +9,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-import static com.InspiredLabs.SS_RegistrationApplication.utils.Constant.*;
+import static com.InspiredLabs.SS_RegistrationApplication.utils.Constant.IMAGE_NAME;
+import static com.InspiredLabs.SS_RegistrationApplication.utils.Constant.VERIFICATION_CODE;
 
 @Service
 public class QRCodeService {
@@ -30,13 +28,16 @@ public class QRCodeService {
             LOGGER.info("VerificationCode: " + verificationDetails.get(VERIFICATION_CODE));
             LOGGER.info("Image name : " + verificationDetails.get(IMAGE_NAME));
 
-                     // User-supplied Unicode text
+
             QrCode.Ecc errCorLvl = QrCode.Ecc.LOW;  // Error correction level
 
             QrCode qr = QrCode.encodeText(verificationDetails.get(VERIFICATION_CODE), errCorLvl);  // Make the QR Code symbol
 
             BufferedImage img = toImage(qr, 10, 4);          // Convert to bitmap image
-            File imgFile = new File(IMAGE_PATH + verificationDetails.get(IMAGE_NAME));   // File path for output
+
+            String image_name = this.getClass().getResource("/").getFile()+verificationDetails.get(IMAGE_NAME);// File path for output
+            File imgFile = new File(image_name);
+            LOGGER.info("File location ==================    "+ imgFile.getAbsolutePath());
             ImageIO.write(img, "png", imgFile);              // Write image to file
 
             String svg = toSvgString(qr, 4, "#FFFFFF", "#000000");  // Convert to SVG XML code

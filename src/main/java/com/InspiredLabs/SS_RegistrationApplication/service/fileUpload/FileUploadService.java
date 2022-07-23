@@ -4,14 +4,12 @@ package com.InspiredLabs.SS_RegistrationApplication.service.fileUpload;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.logging.Logger;
 
 import static com.InspiredLabs.SS_RegistrationApplication.utils.Constant.BUCKET_NAME;
-import static com.InspiredLabs.SS_RegistrationApplication.utils.Constant.IMAGE_PATH;
 
 @Service
 public class FileUploadService {
@@ -25,9 +23,9 @@ public class FileUploadService {
     }
 
     public void upload(String fileName) {
-        File file = new File(IMAGE_PATH + fileName);
 
-
+        File file = new File(this.getClass().getResource("/" + fileName).getFile());
+        LOGGER.info("This is is the uploaded files path " + file.getAbsolutePath());
 
         try {
             Upload upload = transferManager.upload(BUCKET_NAME, fileName, file);

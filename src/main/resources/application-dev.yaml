@@ -31,12 +31,11 @@ spring:
 
 app:
   configuration:
-    sendGridApiKey: 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
     accessKey: AKIA5BMUX5KS25P2HQ2Z
     secret: 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
 
 
 server:
-  port: 8089
+  port: 8080
 
 
