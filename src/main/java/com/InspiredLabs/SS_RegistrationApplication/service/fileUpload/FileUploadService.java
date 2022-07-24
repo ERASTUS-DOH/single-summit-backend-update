@@ -25,7 +25,7 @@ public class FileUploadService {
     public void upload(String fileName) {
 
 //        File file = new File(this.getClass().getResource("/" + fileName).getFile());
-        File file = new File("/var/app/current/file:/var/app/current/" + fileName);
+        File file = new File("/src/images" + fileName);
 //
        // LOGGER.info("This is is the uploaded files path " + file.getAbsolutePath());
 

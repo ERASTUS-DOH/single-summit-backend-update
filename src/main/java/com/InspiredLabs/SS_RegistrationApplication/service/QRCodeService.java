@@ -36,7 +36,7 @@ public class QRCodeService {
             BufferedImage img = toImage(qr, 10, 4);          // Convert to bitmap image
 
 //            String image_name = this.getClass().getResource("/").getFile()+verificationDetails.get(IMAGE_NAME);// File path for output
-            File imgFile = new File("/var/app/current/file:/var/app/current/"+verificationDetails.get(IMAGE_NAME));
+            File imgFile = new File("/src/images"+verificationDetails.get(IMAGE_NAME));
             LOGGER.info("File location ==================    "+ imgFile.getAbsolutePath());
             ImageIO.write(img, "png", imgFile);              // Write image to file
 
