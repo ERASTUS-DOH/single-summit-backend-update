@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("SSRegistration/api/v1")
 public class RegistrationController {
 

@@ -78,6 +78,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>single-summit-docker</finalName>
 	</build>
 
 
