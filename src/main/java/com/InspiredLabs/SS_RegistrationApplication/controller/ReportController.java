@@ -4,6 +4,7 @@ import com.InspiredLabs.SS_RegistrationApplication.dto.Participant;
 import com.InspiredLabs.SS_RegistrationApplication.service.ReportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("SSRegistration/api/v1/report")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ReportController {
 
     private final ReportService reportService;

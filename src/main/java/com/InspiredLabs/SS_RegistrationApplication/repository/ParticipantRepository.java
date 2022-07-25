@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     @Query(value = " SELECT p FROM Participant p WHERE p.verificationCode = :verificationCode")
     Participant findByVerificationCode(@Param("verificationCode") String Verification);
 
+    @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE Participant p set p.verificationStatus = :verify where p.verificationCode = :code")
     void verifyParticipant(@Param("verify") boolean verify,  @Param("code") String verificationCode);

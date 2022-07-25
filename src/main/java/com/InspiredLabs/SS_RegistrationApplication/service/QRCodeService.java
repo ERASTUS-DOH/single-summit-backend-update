@@ -35,15 +35,16 @@ public class QRCodeService {
 
             BufferedImage img = toImage(qr, 10, 4);          // Convert to bitmap image
 
-//            String image_name = this.getClass().getResource("/").getFile()+verificationDetails.get(IMAGE_NAME);// File path for output
-            File imgFile = new File("/src/images"+verificationDetails.get(IMAGE_NAME));
+            String image_name = this.getClass().getResource("/").getFile()+verificationDetails.get(IMAGE_NAME);// File path for output
+            File imgFile = new File(image_name);
+//            File imgFile = new File("/src/images"+verificationDetails.get(IMAGE_NAME));
             LOGGER.info("File location ==================    "+ imgFile.getAbsolutePath());
             ImageIO.write(img, "png", imgFile);              // Write image to file
 
-            String svg = toSvgString(qr, 4, "#FFFFFF", "#000000");  // Convert to SVG XML code
-            File svgFile = new File("hello-world-QR.svg");          // File path for output
-            Files.write(svgFile.toPath(),                           // Write image to file
-                    svg.getBytes(StandardCharsets.UTF_8));
+//            String svg = toSvgString(qr, 4, "#FFFFFF", "#000000");  // Convert to SVG XML code
+//            File svgFile = new File("hello-world-QR.svg");          // File path for output
+//            Files.write(svgFile.toPath(),                           // Write image to file
+//                    svg.getBytes(StandardCharsets.UTF_8));
 
 
 

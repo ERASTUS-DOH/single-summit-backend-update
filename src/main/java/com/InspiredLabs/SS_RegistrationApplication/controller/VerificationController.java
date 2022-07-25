@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("SSRegistration/api/v1/verification")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class VerificationController {
     //Verify user based on user id.
 
@@ -22,7 +23,7 @@ public class VerificationController {
         this.verificationService = verificationService;
     }
 
-    @PostMapping("/verify/{verificationCode}")
+    @GetMapping("/verify/{verificationCode}")
     public ResponseEntity<String> verifyParticipant(@PathVariable String verificationCode) throws InvalidVerificationCodeException {
         this.verificationService.verify(verificationCode);
         return new ResponseEntity<>("Verification Successful", HttpStatus.OK);
