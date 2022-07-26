@@ -1,6 +1,7 @@
 package com.InspiredLabs.SS_RegistrationApplication.controller;
 
 import com.InspiredLabs.SS_RegistrationApplication.dto.Participant;
+import com.InspiredLabs.SS_RegistrationApplication.dto.SuccessMessage;
 import com.InspiredLabs.SS_RegistrationApplication.exception.InvalidVerificationCodeException;
 import com.InspiredLabs.SS_RegistrationApplication.exception.UserAlreadyVerifiedException;
 import com.InspiredLabs.SS_RegistrationApplication.service.VerificationService;
@@ -25,9 +26,12 @@ public class VerificationController {
     }
 
     @GetMapping("/verify/{verificationCode}")
-    public ResponseEntity<String> verifyParticipant(@PathVariable String verificationCode) throws InvalidVerificationCodeException, UserAlreadyVerifiedException {
+    public ResponseEntity<SuccessMessage> verifyParticipant(@PathVariable String verificationCode) throws InvalidVerificationCodeException, UserAlreadyVerifiedException {
         this.verificationService.verify(verificationCode);
-        return new ResponseEntity<>("Verification Successful", HttpStatus.OK);
+        SuccessMessage successMessage = new SuccessMessage();
+        successMessage.setMessage("Verification Successful");
+        successMessage.setHttpStatus(HttpStatus.OK);
+        return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 
     @GetMapping("/participants/verified")
