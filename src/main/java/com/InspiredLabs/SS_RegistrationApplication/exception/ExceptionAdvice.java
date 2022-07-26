@@ -15,4 +15,10 @@ public class ExceptionAdvice {
         Error error = new Error(HttpStatus.CONFLICT, e.getLocalizedMessage());
         return new ResponseEntity<>(error, error.getHttpStatus());
     }
+
+    @ExceptionHandler(UserAlreadyVerifiedException.class)
+    public ResponseEntity<Error> handleException2(UserAlreadyVerifiedException e) {
+        Error error = new Error(HttpStatus.ALREADY_REPORTED, e.getLocalizedMessage());
+        return new ResponseEntity<>(error, error.getHttpStatus());
+    }
 }

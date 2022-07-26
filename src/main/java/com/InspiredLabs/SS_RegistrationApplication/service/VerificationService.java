@@ -2,6 +2,7 @@ package com.InspiredLabs.SS_RegistrationApplication.service;
 
 import com.InspiredLabs.SS_RegistrationApplication.dto.Participant;
 import com.InspiredLabs.SS_RegistrationApplication.exception.InvalidVerificationCodeException;
+import com.InspiredLabs.SS_RegistrationApplication.exception.UserAlreadyVerifiedException;
 import com.InspiredLabs.SS_RegistrationApplication.repository.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,14 @@ public class VerificationService {
     }
 
 
-    public Participant verify(String verificationCode) throws InvalidVerificationCodeException {
-   if(this.participantRepository.findByVerificationCode(verificationCode) != null){
-       this.participantRepository.verifyParticipant(true, verificationCode);
-       return this.participantRepository.findByVerificationCode(verificationCode);
+    public Participant verify(String verificationCode) throws InvalidVerificationCodeException, UserAlreadyVerifiedException {
+        Participant participant = this.participantRepository.findByVerificationCode(verificationCode);
+   if(participant != null){
+       if(!participant.isVerificationStatus()){
+           this.participantRepository.verifyParticipant(true, verificationCode);
+           return this.participantRepository.findByVerificationCode(verificationCode);
+       }
+       else throw new UserAlreadyVerifiedException("Participant Already Verified");
    }
    else {
             throw new InvalidVerificationCodeException("VerificationCode does not exist");

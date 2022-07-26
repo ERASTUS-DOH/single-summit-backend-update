@@ -2,6 +2,7 @@ package com.InspiredLabs.SS_RegistrationApplication.controller;
 
 import com.InspiredLabs.SS_RegistrationApplication.dto.Participant;
 import com.InspiredLabs.SS_RegistrationApplication.exception.InvalidVerificationCodeException;
+import com.InspiredLabs.SS_RegistrationApplication.exception.UserAlreadyVerifiedException;
 import com.InspiredLabs.SS_RegistrationApplication.service.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class VerificationController {
     }
 
     @GetMapping("/verify/{verificationCode}")
-    public ResponseEntity<String> verifyParticipant(@PathVariable String verificationCode) throws InvalidVerificationCodeException {
+    public ResponseEntity<String> verifyParticipant(@PathVariable String verificationCode) throws InvalidVerificationCodeException, UserAlreadyVerifiedException {
         this.verificationService.verify(verificationCode);
         return new ResponseEntity<>("Verification Successful", HttpStatus.OK);
     }
