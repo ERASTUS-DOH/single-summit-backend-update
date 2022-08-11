@@ -64,4 +64,9 @@ public class ReportController {
         return new ResponseEntity<>(this.reportService.getRatioOfMembersToNonMembers(), HttpStatus.OK);
     }
 
+    @GetMapping("/socialMediaReport")
+    public ResponseEntity<Map<String, Integer>> getSocialMediaReport(){
+        return new ResponseEntity<>(this.reportService.getSocialMediaReport(),HttpStatus.OK);
+    }
+
 }

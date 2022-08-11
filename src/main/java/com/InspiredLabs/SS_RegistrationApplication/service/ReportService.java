@@ -1,7 +1,9 @@
 package com.InspiredLabs.SS_RegistrationApplication.service;
 
 import com.InspiredLabs.SS_RegistrationApplication.dto.Participant;
+import com.InspiredLabs.SS_RegistrationApplication.dto.PublicationAvenue;
 import com.InspiredLabs.SS_RegistrationApplication.repository.ParticipantRepository;
+import com.InspiredLabs.SS_RegistrationApplication.repository.PublicationDataRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -13,9 +15,11 @@ import static com.InspiredLabs.SS_RegistrationApplication.utils.Constant.*;
 @Service
 public class ReportService {
     private final ParticipantRepository participantRepository;
+    private final PublicationDataRepository publicationDataRepository;
 
-    public ReportService(ParticipantRepository participantRepository){
+    public ReportService(ParticipantRepository participantRepository, PublicationDataRepository publicationDataRepository){
         this.participantRepository = participantRepository;
+        this.publicationDataRepository = publicationDataRepository;
     }
 
     public List<Participant> getAllRegisteredParticipants(){
@@ -63,5 +67,30 @@ public class ReportService {
 
     public List<Participant> getAllFemaleParticipants(){
         return this.participantRepository.getParticipantByGender(FEMALE);
+    }
+
+    public Map<String, Integer> getSocialMediaReport() {
+        Map<String, Integer> socialMediaReport = new HashMap<>();
+        Integer facebookReport = this.publicationDataRepository.facebookData().size();
+        Integer twitterReport = this.publicationDataRepository.twitterData().size();
+        Integer friendInviteReport = this.publicationDataRepository.friendData().size();
+        Integer televisionAdDataReport = this.publicationDataRepository.televisionAdData().size();
+        Integer smsDataReport = this.publicationDataRepository.SMSData().size();
+        Integer billBoardDataReport = this.publicationDataRepository.billBoardData().size();
+        Integer sunnyFmDataReport = this.publicationDataRepository.sunnyFmData().size();
+        Integer sweetMelodiesDataReport = this.publicationDataRepository.sweetMelodiesData().size();
+        Integer churchAnnouncementDataReport = this.publicationDataRepository.churchAnnouncementData().size();
+
+        socialMediaReport.put("facebookReport", facebookReport);
+        socialMediaReport.put("twitterReport", twitterReport);
+        socialMediaReport.put("friendInvitationReport", friendInviteReport);
+        socialMediaReport.put("televisionAdDataReport", televisionAdDataReport);
+        socialMediaReport.put("smsDataReport", smsDataReport);
+        socialMediaReport.put("billBoardDataReport", billBoardDataReport);
+        socialMediaReport.put("sunnyFmDataReport", sunnyFmDataReport);
+        socialMediaReport.put("sweetMelodiesDataReport", sweetMelodiesDataReport);
+        socialMediaReport.put("churchAnnouncementDataReport", churchAnnouncementDataReport);
+
+        return socialMediaReport;
     }
 }

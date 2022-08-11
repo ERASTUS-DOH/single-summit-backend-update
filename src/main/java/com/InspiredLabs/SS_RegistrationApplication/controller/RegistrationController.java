@@ -1,5 +1,7 @@
 package com.InspiredLabs.SS_RegistrationApplication.controller;
 
+import com.InspiredLabs.SS_RegistrationApplication.dto.SuccessMessage;
+import com.InspiredLabs.SS_RegistrationApplication.dto.VerificationSuccess;
 import com.InspiredLabs.SS_RegistrationApplication.dto.request.InHouseRegistrationDetails;
 import com.InspiredLabs.SS_RegistrationApplication.dto.request.RegistrationDetails;
 import com.InspiredLabs.SS_RegistrationApplication.exception.InvalidUserException;
@@ -25,16 +27,23 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> participantRegistration(@RequestBody @Valid RegistrationDetails registrationPayload) throws IOException, InterruptedException, InvalidUserException {
+    public ResponseEntity<SuccessMessage> participantRegistration(@RequestBody @Valid RegistrationDetails registrationPayload) throws IOException, InterruptedException, InvalidUserException {
         registrationService.registerParticipant(registrationPayload);
-        return new ResponseEntity<>("Registration Successful",HttpStatus.OK);
+        SuccessMessage successMessage = new SuccessMessage();
+        successMessage.setMessage("Registration Successful");
+        successMessage.setHttpStatus(HttpStatus.OK);
+        return new ResponseEntity<>(successMessage,HttpStatus.OK);
     }
 
 
     @PostMapping("/register/inHouse")
-    public ResponseEntity<String> participantInHouseRegistration(@RequestBody @Valid InHouseRegistrationDetails registrationDetails) throws InvalidUserException {
-        registrationService.inHouseRegistration(registrationDetails);
-        return new ResponseEntity<>("Registration Successful", HttpStatus.OK);
+    public ResponseEntity<VerificationSuccess> participantInHouseRegistration(@RequestBody @Valid InHouseRegistrationDetails registrationDetails) throws InvalidUserException {
+       String verificationPin =  registrationService.inHouseRegistration(registrationDetails);
+        VerificationSuccess vSuccess = new VerificationSuccess();
+        vSuccess.setHttpStatus(HttpStatus.OK);
+        vSuccess.setVerificationCode(verificationPin);
+        vSuccess.setMessage("Registration Successful");
+        return new ResponseEntity<>(vSuccess, HttpStatus.OK);
     }
 
 

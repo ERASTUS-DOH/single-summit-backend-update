@@ -1,10 +1,13 @@
 package com.InspiredLabs.SS_RegistrationApplication.service;
 
 import com.InspiredLabs.SS_RegistrationApplication.dto.Participant;
+import com.InspiredLabs.SS_RegistrationApplication.dto.PublicationAvenue;
+import com.InspiredLabs.SS_RegistrationApplication.dto.PublicationData;
 import com.InspiredLabs.SS_RegistrationApplication.dto.request.InHouseRegistrationDetails;
 import com.InspiredLabs.SS_RegistrationApplication.dto.request.RegistrationDetails;
 import com.InspiredLabs.SS_RegistrationApplication.exception.InvalidUserException;
 import com.InspiredLabs.SS_RegistrationApplication.repository.ParticipantRepository;
+import com.InspiredLabs.SS_RegistrationApplication.repository.PublicationDataRepository;
 import com.InspiredLabs.SS_RegistrationApplication.service.fileUpload.FileUploadService;
 import com.InspiredLabs.SS_RegistrationApplication.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +30,19 @@ private static final Logger LOGGER = Logger.getLogger(RegistrationService.class.
 
     private final ParticipantRepository participantRepository;
 
+    private final PublicationDataRepository publicationDataRepository;
+
     private final EmailService emailService;
 
     private final FileUploadService fileUploadService;
 
     @Autowired
-    public RegistrationService(QRCodeService qrCodeService, ParticipantRepository participantRepository, EmailService emailService, FileUploadService fileUploadService){
+    public RegistrationService(QRCodeService qrCodeService, ParticipantRepository participantRepository, EmailService emailService, FileUploadService fileUploadService, PublicationDataRepository publicationDataRepository){
         this.qrCodeService = qrCodeService;
         this.participantRepository = participantRepository;
         this.emailService = emailService;
         this.fileUploadService = fileUploadService;
+        this.publicationDataRepository = publicationDataRepository;
     }
 
     public void registerParticipant(RegistrationDetails details) throws IOException, InterruptedException, InvalidUserException {
@@ -44,25 +50,22 @@ private static final Logger LOGGER = Logger.getLogger(RegistrationService.class.
         Map<String, String> codes = getImageAndVerificationCode();
 
         Participant participant = new Participant();
-        participant.setFirstName(details.firstName);
-        participant.setLastName(details.lastName);
-        participant.setEmail(details.email);
-        participant.setTelephone(details.telephone);
-        participant.setGender(details.gender);
-        participant.setMemberShipStatus(details.membershipStatus);
-        participant.setFirstTimerStatus(details.firstTimerStatus);
-        participant.setPublicityAvenue(details.publicityAvenue);
+        participant.setFirstName(details.getFirstName());
+        participant.setLastName(details.getLastName());
+        participant.setEmail(details.getEmail());
+        participant.setTelephone(details.getTelephone());
+        participant.setGender(details.getGender());
+        participant.setMemberShipStatus(details.isMembershipStatus());
+        participant.setFirstTimerStatus(details.isFirstTimerStatus());
         participant.setVerificationCode(codes.get(VERIFICATION_CODE));
         participant.setVerificationStatus(false);
         participant.setImage_name(codes.get(IMAGE_NAME));
 
         //verify if user already exist with the same mail:
-
         Optional<Participant> optionalParticipant = this.participantRepository.getParticipantByEmail(participant.email);
         if(optionalParticipant.isPresent()){
             throw new InvalidUserException("User with email "+ participant.email + " already exist");
         }
-
 
         try{
             LOGGER.info("QR-Code generation started..........");
@@ -82,19 +85,34 @@ private static final Logger LOGGER = Logger.getLogger(RegistrationService.class.
 
         this.participantRepository.save(participant);
 
-    }
+        PublicationAvenue publicationAvenue = new PublicationAvenue();
+        publicationAvenue.setFaceBook(details.getPublicationData().isFaceBook());
+        publicationAvenue.setTwitter(details.getPublicationData().isTwitter());
+        publicationAvenue.setFriend(details.getPublicationData().isFriend());
+        publicationAvenue.setTelevisionAd(details.getPublicationData().isTelevisionAd());
+        publicationAvenue.setSMS(details.getPublicationData().isSMS());
+        publicationAvenue.setBillboard(details.getPublicationData().isBillboard());
+        publicationAvenue.setSunnyFm(details.getPublicationData().isSunnyFm());
+        publicationAvenue.setSweetMelodies(details.getPublicationData().isSweetMelodies());
+        publicationAvenue.setChurchAnnouncement(details.getPublicationData().isChurchAnnouncement());
 
-    public void inHouseRegistration(InHouseRegistrationDetails registrationDetails) throws InvalidUserException {
+        Optional<Participant> participantOptional = this.participantRepository.getParticipantByEmail(participant.email);
+        participantOptional.ifPresent(value -> publicationAvenue.setParticipantId(value.getId()));
+        publicationDataRepository.save(publicationAvenue);
+   }
+
+    public String inHouseRegistration(InHouseRegistrationDetails registrationDetails) throws InvalidUserException {
+        String verificationPin = getVerificationPin();
         Participant participant = new Participant();
-        participant.setFirstName(registrationDetails.firstName);
-        participant.setLastName(registrationDetails.lastName);
-        participant.setEmail(registrationDetails.email);
-        participant.setTelephone(registrationDetails.telephone);
-        participant.setGender(registrationDetails.gender);
-        participant.setMemberShipStatus(registrationDetails.membershipStatus);
-        participant.setFirstTimerStatus(registrationDetails.firstTimerStatus);
-        participant.setPublicityAvenue(registrationDetails.publicityAvenue);
-        participant.setVerificationStatus(true);
+        participant.setFirstName(registrationDetails.getFirstName());
+        participant.setLastName(registrationDetails.getLastName());
+        participant.setEmail(registrationDetails.getEmail());
+        participant.setTelephone(registrationDetails.getTelephone());
+        participant.setGender(registrationDetails.getGender());
+        participant.setMemberShipStatus(registrationDetails.isMembershipStatus());
+        participant.setFirstTimerStatus(registrationDetails.isFirstTimerStatus());
+        participant.setVerificationStatus(false);
+        participant.setVerificationCode(verificationPin);
 
         Optional<Participant> optionalParticipant = this.participantRepository.getParticipantByEmail(participant.email);
         if(optionalParticipant.isPresent()){
@@ -102,6 +120,23 @@ private static final Logger LOGGER = Logger.getLogger(RegistrationService.class.
         }
 
         this.participantRepository.save(participant);
+
+        PublicationAvenue publicationAvenue = new PublicationAvenue();
+        publicationAvenue.setFaceBook(registrationDetails.getPublicationData().isFaceBook());
+        publicationAvenue.setTwitter(registrationDetails.getPublicationData().isTwitter());
+        publicationAvenue.setFriend(registrationDetails.getPublicationData().isFriend());
+        publicationAvenue.setTelevisionAd(registrationDetails.getPublicationData().isTelevisionAd());
+        publicationAvenue.setSMS(registrationDetails.getPublicationData().isSMS());
+        publicationAvenue.setBillboard(registrationDetails.getPublicationData().isBillboard());
+        publicationAvenue.setSunnyFm(registrationDetails.getPublicationData().isSunnyFm());
+        publicationAvenue.setSweetMelodies(registrationDetails.getPublicationData().isSweetMelodies());
+        publicationAvenue.setChurchAnnouncement(registrationDetails.getPublicationData().isChurchAnnouncement());
+
+        Optional<Participant> participantOptional = this.participantRepository.getParticipantByEmail(participant.email);
+        participantOptional.ifPresent(value -> publicationAvenue.setParticipantId(value.getId()));
+        publicationDataRepository.save(publicationAvenue);
+
+        return verificationPin;
     }
 
 
@@ -118,5 +153,14 @@ private static final Logger LOGGER = Logger.getLogger(RegistrationService.class.
         result.put(VERIFICATION_CODE, verificationCode);
 
         return result;
+    }
+
+    public static String getVerificationPin(){
+        String verificationPin = Constant.uniqueCodeGenerator().split("-")[4];
+        StringBuilder pin = new StringBuilder();
+        for(int x = 11; x > 5; x--){
+            pin.append(verificationPin.charAt(x));
+        }
+        return pin.toString();
     }
 }

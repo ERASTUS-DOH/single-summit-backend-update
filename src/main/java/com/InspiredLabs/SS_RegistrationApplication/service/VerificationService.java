@@ -20,12 +20,12 @@ public class VerificationService {
     }
 
 
-    public Participant verify(String verificationCode) throws InvalidVerificationCodeException, UserAlreadyVerifiedException {
+    public void verify(String verificationCode) throws InvalidVerificationCodeException, UserAlreadyVerifiedException {
         Participant participant = this.participantRepository.findByVerificationCode(verificationCode);
    if(participant != null){
        if(!participant.isVerificationStatus()){
            this.participantRepository.verifyParticipant(true, verificationCode);
-           return this.participantRepository.findByVerificationCode(verificationCode);
+           this.participantRepository.findByVerificationCode(verificationCode);
        }
        else throw new UserAlreadyVerifiedException("Participant Already Verified");
    }
@@ -40,5 +40,8 @@ public class VerificationService {
 
     public List<Participant> getRegisteredParticipants(){
         return this.participantRepository.findAll();
+    }
+
+    public void verifyOnPrem(String verificationCode) {
     }
 }

@@ -28,10 +28,14 @@ public class VerificationController {
     @GetMapping("/verify/{verificationCode}")
     public ResponseEntity<SuccessMessage> verifyParticipant(@PathVariable String verificationCode) throws InvalidVerificationCodeException, UserAlreadyVerifiedException {
         this.verificationService.verify(verificationCode);
-        SuccessMessage successMessage = new SuccessMessage();
-        successMessage.setMessage("Verification Successful");
-        successMessage.setHttpStatus(HttpStatus.OK);
-        return new ResponseEntity<>(successMessage, HttpStatus.OK);
+        return new ResponseEntity<>(getSuccessMessage(), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/verify/onPrem/{verificationCode}")
+    public ResponseEntity<SuccessMessage> verifyOnPrem(@PathVariable String verificationCode) throws InvalidVerificationCodeException, UserAlreadyVerifiedException{
+        this.verificationService.verifyOnPrem(verificationCode);
+        return new ResponseEntity<>(getSuccessMessage(), HttpStatus.OK);
     }
 
     @GetMapping("/participants/verified")
@@ -40,10 +44,18 @@ public class VerificationController {
         return new ResponseEntity<>(verifiedParticipants, HttpStatus.OK);
     }
 
+
     @GetMapping("/participants")
     public ResponseEntity<List<Participant>> getAllRegisteredParticipants(){
         List<Participant> registeredParticipants = this.verificationService.getRegisteredParticipants();
         return new ResponseEntity<>(registeredParticipants, HttpStatus.OK);
+    }
+
+    public SuccessMessage getSuccessMessage(){
+        SuccessMessage successMessage = new SuccessMessage();
+        successMessage.setMessage("Verification Successful");
+        successMessage.setHttpStatus(HttpStatus.OK);
+        return successMessage;
     }
 
 }
